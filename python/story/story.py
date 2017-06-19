@@ -2,37 +2,41 @@
 
 class Story():
     def __init__(self):
-        self.treeMap = {}
         self.totalPay = 0
 
     def totalSalary(self, relations):
 
+        teamMap = self._teamFormation(relations)
+        self._payrollCalculation(teamMap)
+
+        print(self.totalPay)
+
+    def _teamFormation(self, relations):
+        teamMap = {}
         for boss, worker in enumerate(relations):
             print('boss', boss)
-            self.treeMap[boss] = []
+            teamMap[boss] = []
             for section, isTeam in enumerate(worker):
                 if isTeam == 'Y':
-                    self.treeMap[boss].append(section)
+                    teamMap[boss].append(section)
 
-        for boss, teammate in self.treeMap.items():
+        return teamMap
 
+    def _payrollCalculation(self, teamMap):
+        for boss, teammate in teamMap.items():
             if len(teammate) == 0:
                 self.totalPay += 1
                 continue
 
-            self._teamPay(teammate)
+            self._teamPay(teammate, teamMap)
 
-        print(self.totalPay)
-
-    def _teamPay(self, teammate):
+    def _teamPay(self, teammate, teamMap):
         for worker in teammate:
-            if len(self.treeMap[worker]) == 0:
+            if len(teamMap[worker]) == 0:
                 self.totalPay += 1
                 continue
 
-            self._teamPay(self.treeMap[worker])
-
-
+            self._teamPay(teamMap[worker], teamMap)
 
 story = Story()
 
